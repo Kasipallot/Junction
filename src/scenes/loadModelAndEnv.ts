@@ -35,7 +35,7 @@ export class LoadModelAndEnvScene implements CreateSceneClass {
             0,
             Math.PI,
             10,
-            new Vector3(0, 0, 0),
+            new Vector3(-10, 0, 0),
             scene
         );
 
@@ -76,9 +76,9 @@ export class LoadModelAndEnvScene implements CreateSceneClass {
 
         const slotMachineMesh = slotMachine.meshes[0];
 
-        slotMachineMesh.rotate(new Vector3(0, 1, 0), Math.PI * 3 / 4)
-        slotMachineMesh.position.x = -5;
-        slotMachineMesh.position.z = 5;
+        slotMachineMesh.rotate(new Vector3(0, 1, 0), Math.PI * 6 / 4)
+        slotMachineMesh.position.x = 0;
+        slotMachineMesh.position.z = 0;
         slotMachineMesh.position.y = -10.1;
 
         // just scale it so we can see it better

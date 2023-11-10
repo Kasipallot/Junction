@@ -1,36 +1,17 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "module": "esNext",
-    "target": "es6",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "typeRoots": [
-      "./node_modules/@webgpu/types",
-      "./node_modules/@types"
-    ],
-    "incremental": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+	"compilerOptions": {
+        "module": "esNext",
+		"target": "es2021",
+		"moduleResolution": "node",
+		"strict": true,
+		"noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+		"preserveConstEnums":true,
+        "sourceMap": true,
+        "rootDir": "./",
+        "esModuleInterop": true,
+	}
 }

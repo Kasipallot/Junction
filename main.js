@@ -231,6 +231,9 @@ const createScene = async function () {
   var box1 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 5));
   var box2 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, -5));
   var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 0));
+  var box4 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, -3));
+  var box5 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, -1));
+  var box6 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4,  1));
   var z = 0
   function shootCoinFromBox(box) {
     z += 1
@@ -252,6 +255,35 @@ const createScene = async function () {
     if (coinQueue.length > 360) {
       coinQueue.dequeue().dispose();
     }
+  }
+  function shootCoinFromMachine(box) {
+    z += 1
+    var coinClone = coin.clone(z + "coinClone" + z);
+    coinClone.visibility = 1;
+    coinClone.position = box.position.clone(); // Start at the box's position
+
+    // Add physics to the coin
+    coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 10, restitution: 0 }, scene);
+    // Set random rotation
+    var randomRotationX = Math.random() * 2 * Math.PI; // Random rotation around X axis
+    var randomRotationY = Math.random() * 2 * Math.PI; // Random rotation around Y axis
+    var randomRotationZ = Math.random() * 2 * Math.PI; // Random rotation around Z axis
+    coinClone.rotation = new BABYLON.Vector3(randomRotationX, randomRotationY, randomRotationZ);
+    // Apply an impulse to shoot the coin
+    var shootDirection = new BABYLON.Vector3(-8, 4, Math.random() - 0.5);
+    coinClone.physicsImpostor.applyImpulse(shootDirection.scale(5), coinClone.getAbsolutePosition());
+    coinClone.actionManager = new BABYLON.ActionManager(scene);
+    coinClone.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        {
+          trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+          parameter: ground,
+        },
+        function () {
+          coinClone.dispose();
+        }
+      )
+    );
   }
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
@@ -335,8 +367,18 @@ const createScene = async function () {
       setTimeout(function () {
         shootCoinFromBox(box1);
         shootCoinFromBox(box2);
-        shootCoinFromBox(box3); // Replace with your function to shoot a ball
+        shootCoinFromBox(box3);
+        shootCoinFromMachine(box4);
+        shootCoinFromMachine(box5);
+        shootCoinFromMachine(box6);
       }, 3000  + 15 * i); // Delay increases with each iteration
+    }
+    for (let i = 0; i < 15; i++) {
+      setTimeout(function () {
+        shootCoinFromMachine(box4);
+        shootCoinFromMachine(box5);
+        shootCoinFromMachine(box6);
+      }, 3000  + 150 * i); // Delay increases with each iteration
     }
   };
 

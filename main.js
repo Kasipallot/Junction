@@ -71,7 +71,7 @@ const createScene = async function () {
     new BABYLON.Vector3(0, 1, 0),      
     scene
   );
-  
+  // light
     
   const lightPoint = new BABYLON.PointLight(
     'pointLight',

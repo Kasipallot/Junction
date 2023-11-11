@@ -9,7 +9,7 @@ const canvas = document.getElementById('renderCanvas');
 
 const engine = new BABYLON.WebGPUEngine(canvas);
 await engine.initAsync();
-let slotMachineMesh; // Declare it in a higher scope
+let slotMachine; // Declare it in a higher scope
 
 const createScene = async function () {
   const scene = new BABYLON.Scene(engine);
@@ -58,7 +58,7 @@ const createScene = async function () {
       coinClone.position.z = (j - 5) * 1.4;
       var shootDirection = new BABYLON.Vector3(Math.random(), 1, Math.random()).normalize();
       coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 0.5, restitution: 1 }, scene);
-      coinClone.physicsImpostor.applyImpulse(shootDirection.scale(100), coinClone.getAbsolutePosition());
+      coinClone.physicsImpostor.applyImpulse(shootDirection.scale(10), coinClone.getAbsolutePosition());
       coins.push(coinClone); // Add the coin to the array
     }
   }
@@ -101,10 +101,14 @@ const createScene = async function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  const slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots5.glb", scene);
+  slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots7.glb", scene);
   const casino = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "blacklodge1.glb", scene);
+  slotMachine.animationGroups.forEach((animationGroup, index) => {
+    // Start playing each animation group
+    animationGroup.stop();
+  });
 
-  slotMachineMesh = slotMachine.meshes[0];
+  const slotMachineMesh = slotMachine.meshes[0];
   slotMachineMesh.scaling.scaleInPlace(2.8);
 
   const casinoMesh = casino.meshes[0];
@@ -160,7 +164,11 @@ const createScene = async function () {
   b8.style.fontSize = "1.1em";
   buttonbox.appendChild(b8);
   b8.onclick = function () {
-    //setCamLateralLeft();
+    slotMachine.animationGroups.forEach((animationGroup, index) => {
+      // Start playing each animation group
+      animationGroup.start();
+    });
+    console.log(slotMachine.animationGroups)
   };
 
   var b9 = document.createElement("button");
@@ -252,9 +260,9 @@ const createScene = async function () {
 const scene = await createScene();
 
 engine.runRenderLoop(function () {
-  if (slotMachineMesh) {
-    //console.log(camera.position.x, camera.position.y)
-  }
+  //if (slotMachineMesh) {
+  //console.log(camera.position.x, camera.position.y)
+  //}
   scene.render();
 });
 

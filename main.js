@@ -7,7 +7,8 @@ import ammo from 'ammo.js';
 const Ammo = await ammo.bind(window)();
 const canvas = document.getElementById('renderCanvas');
 
-const engine = new BABYLON.Engine(canvas);
+const engine = new BABYLON.WebGPUEngine(canvas);
+await engine.initAsync();
 let slotMachine; // Declare it in a higher scope
 
 class Queue {
@@ -71,7 +72,7 @@ const createScene = async function () {
     new BABYLON.Vector3(0, 1, 0),      
     scene
   );
-  // light
+  
     
   const lightPoint = new BABYLON.PointLight(
     'pointLight',
@@ -99,7 +100,7 @@ const createScene = async function () {
     // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0;
   
-const shadowGenerator = new BABYLON.ShadowGenerator(16000, spotLight);
+const shadowGenerator = new BABYLON.ShadowGenerator(1024, spotLight);
 
   var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 175, depth: 175, height: 2.75 }, scene);
   ground.position.y = -1;

@@ -15,12 +15,16 @@ const createScene = async function () {
     "my camera",
     0,
     -1,
-    45,
+    55,
     new BABYLON.Vector3(0, 0, 0),
     scene
   );
   camera.attachControl(canvas, true);
   camera.useFramingBehavior = true;
+  camera.angularSensibilityX = 2000;
+  camera.angularSensibilityY = 2000;
+  camera.panningSensibility = 2000;
+  camera.fov = 1.016;
 
   const utilLayer = new BABYLON.UtilityLayerRenderer(scene);
 
@@ -41,7 +45,7 @@ const createScene = async function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  const slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots1.glb", scene);
+  const slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots5.glb", scene);
   const casino = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "blacklodge1.glb", scene);
 
   slotMachineMesh = slotMachine.meshes[0];
@@ -62,7 +66,9 @@ const createScene = async function () {
       hit.pickedMesh.material.diffuseColor = BABYLON.Color3.Red();
     }
   };
-  camera.setTarget(slotMachineMesh.position.add(new BABYLON.Vector3(0, 3, 0)));
+  const cameraTarget = slotMachineMesh.position.add(new BABYLON.Vector3(-2, 10, -1));
+  camera.setTarget(cameraTarget);
+
   // add buttons
   var buttonbox = document.createElement("div");
   buttonbox.id = "buttonbox";
@@ -161,6 +167,12 @@ const createScene = async function () {
     var ease = new BABYLON.CubicEase();
     ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
     BABYLON.Animation.CreateAndStartAnimation('at4', cam, 'position', speed, frameCount, cam.position, newPos, 0, ease);
+
+
+    // Rotation animation
+    var rotationEase = new BABYLON.CubicEase();
+    rotationEase.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+    BABYLON.Animation.CreateAndStartAnimation('rotationAnimation', cam, 'rotation', speed, frameCount, cam.rotation, newRotation, 0, rotationEase);
   }
 
   var speed = 45;
@@ -168,7 +180,7 @@ const createScene = async function () {
 
   var setCamDefault = function () {
     animateCameraTargetToPosition(camera, speed, frameCount, new BABYLON.Vector3(0, 0, 0));
-    animateCameraToPosition(camera, speed, frameCount, new BABYLON.Vector3(-45, 55, -45));
+    animateCameraToPosition(camera, speed, frameCount, new BABYLON.Vector3(-2, 10, -1));
   };
   var setCamLateralLeft = function () {
     animateCameraTargetToPosition(camera, speed, frameCount, new BABYLON.Vector3(5, 15, 0));
@@ -185,7 +197,7 @@ const scene = await createScene();
 
 engine.runRenderLoop(function () {
   if (slotMachineMesh) {
-    //slotMachineMesh.rotate(new BABYLON.Vector3(0, 1, 0), 0.01)
+    //console.log(camera.position.x, camera.position.y)
   }
   scene.render();
 });

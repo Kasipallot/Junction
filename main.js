@@ -415,12 +415,11 @@ const createScene = async function () {
     scene
   );
   var coinMat = new BABYLON.StandardMaterial("coinMaterial", scene);
-  coinMat.diffuseColor = BABYLON.Color3.Yellow();
+  coinMat.diffuseColor = new BABYLON.Color3(1, 0.843, 0);
   coinMat.specularPower = 256;
   coin.material = coinMat;
   coin.visibility = 0;
-  
-  // Adding the original coin shadows from spotlight
+  coin.shadowEnabled = true;
   shadowGenerator.addShadowCaster(coin);
   coin.receiveShadows = true;
 
@@ -438,9 +437,9 @@ const createScene = async function () {
   var box1 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 5));
   var box2 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, -5));
   var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 0));
-  var box4 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, -3));
-  var box5 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, -1));
-  var box6 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, 1));
+  var box4 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 2, -3));
+  var box5 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 2, -1));
+  var box6 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 2, 1));
   var z = 0;
   function shootCoinFromBox(box) {
     z += 1;

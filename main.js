@@ -270,8 +270,8 @@ const createScene = async function () {
     var randomRotationZ = Math.random() * 2 * Math.PI; // Random rotation around Z axis
     coinClone.rotation = new BABYLON.Vector3(randomRotationX, randomRotationY, randomRotationZ);
     // Apply an impulse to shoot the coin
-    var shootDirection = new BABYLON.Vector3(-8, 4, Math.random() - 0.5);
-    coinClone.physicsImpostor.applyImpulse(shootDirection.scale(5), coinClone.getAbsolutePosition());
+    var shootDirection = new BABYLON.Vector3(-4 + Math.random() - 0.5, 2 + Math.random() - 0.5, Math.random() - 0.5);
+    coinClone.physicsImpostor.applyImpulse(shootDirection.scale(10), coinClone.getAbsolutePosition());
     coinClone.actionManager = new BABYLON.ActionManager(scene);
     coinClone.actionManager.registerAction(
       new BABYLON.ExecuteCodeAction(
@@ -363,7 +363,7 @@ const createScene = async function () {
       // Start playing each animation group
       animationGroup.start();
     });
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 30; i++) {
       setTimeout(function () {
         shootCoinFromBox(box1);
         shootCoinFromBox(box2);
@@ -375,7 +375,7 @@ const createScene = async function () {
         shootCoinFromMachine(box4);
         shootCoinFromMachine(box5);
         shootCoinFromMachine(box6);
-      }, 3000  + 150 * i); // Delay increases with each iteration
+      }, 4000  + 150 * i); // Delay increases with each iteration
     }
   };
 

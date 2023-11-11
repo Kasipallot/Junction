@@ -34,17 +34,23 @@ const createScene = async function () {
 
   const utilLayer = new BABYLON.UtilityLayerRenderer(scene);
 
-  var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 200, depth: 200, height: 2.5 }, scene);
+  var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 200, depth: 200, height: 2.75 }, scene);
   ground.position.y = -1;
   ground.visibility = 0;
   ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0.3 }, scene);
   // var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   // Create a coin template with physics properties but not visible
-  var coinMeshes = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "mario_coin.glb", scene);
-  var coin = coinMeshes.meshes[0];
-  coin.scaling.scaleInPlace(0.06);
-  // Rotate 90 degrees so the face is up
-  coin.rotate(new BABYLON.Vector3(1, 0, 0), Math.PI / 2);
+  // var coinMeshes = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "mario_coin.glb", scene);
+  // var coin = coinMeshes.meshes[0];
+  // coin.scaling.scaleInPlace(0.06);
+  // // Rotate 90 degrees so the face is up
+  // coin.rotate(new BABYLON.Vector3(1, 0, 0), Math.PI / 2);
+  // coin.visibility = 0;
+  var coin = BABYLON.MeshBuilder.CreateCylinder("coin", {diameter: 0.6, height: 0.1}, scene);
+  var coinMat = new BABYLON.StandardMaterial("coinMaterial", scene);
+  coinMat.diffuseColor = BABYLON.Color3.Yellow();
+  coinMat.specularPower = 256;
+  coin.material = coinMat;
   coin.visibility = 0;
 
   var coins = []; // Array to hold all coins
@@ -56,9 +62,9 @@ const createScene = async function () {
       coinClone.position.y = 20;
       coinClone.position.x = (i - 5) * 1.4 - 10;
       coinClone.position.z = (j - 5) * 1.4;
-      var shootDirection = new BABYLON.Vector3(Math.random(), 1, Math.random()).normalize();
+      var shootDirection = new BABYLON.Vector3(2* (Math.random() - 0.5), 2* (Math.random() - 0.5), 2* (Math.random() - 0.5));
       coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 0.5, restitution: 1 }, scene);
-      coinClone.physicsImpostor.applyImpulse(shootDirection.scale(100), coinClone.getAbsolutePosition());
+      coinClone.physicsImpostor.applyImpulse(shootDirection.scale(10), coinClone.getAbsolutePosition());
       coins.push(coinClone); // Add the coin to the array
     }
   }
@@ -73,9 +79,9 @@ const createScene = async function () {
   }
 
   // Example of creating two invisible boxes
-  var box1 = createInvisibleBox(scene, new BABYLON.Vector3(0, 4, -5));
-  var box2 = createInvisibleBox(scene, new BABYLON.Vector3(1, 4, -5));
-  var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-1, 4, -5));
+  var box1 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 50, 5));
+  var box2 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 50, -5));
+  var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 50, 0));
   var z = 0
   function shootCoinFromBox(box) {
     z += 1
@@ -85,10 +91,16 @@ const createScene = async function () {
 
     // Add physics to the coin
     coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1000, friction: 10, restitution: 1 }, scene);
-
+    // Set random rotation
+    var randomRotationX = Math.random() * 2 * Math.PI; // Random rotation around X axis
+    var randomRotationY = Math.random() * 2 * Math.PI; // Random rotation around Y axis
+    var randomRotationZ = Math.random() * 2 * Math.PI; // Random rotation around Z axis
+    coinClone.rotation = new BABYLON.Vector3(randomRotationX, randomRotationY, randomRotationZ);
     // Apply an impulse to shoot the coin
-    var shootDirection = new BABYLON.Vector3(Math.random(), 1, Math.random()).normalize();
-    coinClone.physicsImpostor.applyImpulse(shootDirection.scale(100), coinClone.getAbsolutePosition());
+    var shootDirection = new BABYLON.Vector3(2* (Math.random() - 0.5), 2* (Math.random() - 0.5), 2* (Math.random() - 0.5));
+    coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 0.5, restitution: 1 }, scene);
+    coinClone.physicsImpostor.applyImpulse(shootDirection.scale(10), coinClone.getAbsolutePosition());
+    coins.push(coinClone); // Add the coin to the array
   }
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
@@ -161,6 +173,13 @@ const createScene = async function () {
   buttonbox.appendChild(b8);
   b8.onclick = function () {
     //setCamLateralLeft();
+    for (let i = 0; i < 100; i++) {
+      setTimeout(function() {
+          shootCoinFromBox(box1);
+          shootCoinFromBox(box2);
+          shootCoinFromBox(box3); // Replace with your function to shoot a ball
+      }, 15 * i); // Delay increases with each iteration
+  }
   };
 
   var b9 = document.createElement("button");

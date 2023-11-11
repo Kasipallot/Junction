@@ -11,6 +11,33 @@ const engine = new BABYLON.WebGPUEngine(canvas);
 await engine.initAsync();
 let slotMachine; // Declare it in a higher scope
 
+class Queue {
+  constructor() {
+    this.elements = {};
+    this.head = 0;
+    this.tail = 0;
+  }
+  enqueue(element) {
+    this.elements[this.tail] = element;
+    this.tail++;
+  }
+  dequeue() {
+    const item = this.elements[this.head];
+    delete this.elements[this.head];
+    this.head++;
+    return item;
+  }
+  peek() {
+    return this.elements[this.head];
+  }
+  get length() {
+    return this.tail - this.head;
+  }
+  get isEmpty() {
+    return this.length === 0;
+  }
+}
+
 const createScene = async function () {
   const scene = new BABYLON.Scene(engine);
 
@@ -34,10 +61,38 @@ const createScene = async function () {
 
   const utilLayer = new BABYLON.UtilityLayerRenderer(scene);
 
-  var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 200, depth: 200, height: 2.75 }, scene);
+  var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 175, depth: 175, height: 2.75 }, scene);
   ground.position.y = -1;
   ground.visibility = 0;
   ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var wall1 = BABYLON.MeshBuilder.CreateBox("wall1", { width: 80, depth: 5, height: 50 }, scene);
+  wall1.position.x = -5;
+  wall1.position.z = 27;
+  wall1.position.y = 25;
+  wall1.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  wall1.visibility = 0;
+  wall1.physicsImpostor = new BABYLON.PhysicsImpostor(wall1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var wall2 = BABYLON.MeshBuilder.CreateBox("wall2", { width: 80, depth: 5, height: 50 }, scene);
+  wall2.position.x = -58;
+  wall2.position.z = -28;
+  wall2.position.y = 25;
+  wall2.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  wall2.visibility = 0;
+  wall2.physicsImpostor = new BABYLON.PhysicsImpostor(wall2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var wall3 = BABYLON.MeshBuilder.CreateBox("wall3", { width: 80, depth: 5, height: 50 }, scene);
+  wall3.position.x = -3;
+  wall3.position.z = -28;
+  wall3.position.y = 25;
+  wall3.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  wall3.visibility = 0;
+  wall3.physicsImpostor = new BABYLON.PhysicsImpostor(wall3, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var wall4 = BABYLON.MeshBuilder.CreateBox("wall4", { width: 80, depth: 5, height: 50 }, scene);
+  wall4.position.x = -60;
+  wall4.position.z = 25;
+  wall4.position.y = 25;
+  wall4.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  wall4.visibility = 0;
+  wall4.physicsImpostor = new BABYLON.PhysicsImpostor(wall4, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
   // var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   // Create a coin template with physics properties but not visible
   // var coinMeshes = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "mario_coin.glb", scene);
@@ -46,7 +101,7 @@ const createScene = async function () {
   // // Rotate 90 degrees so the face is up
   // coin.rotate(new BABYLON.Vector3(1, 0, 0), Math.PI / 2);
   // coin.visibility = 0;
-  var coin = BABYLON.MeshBuilder.CreateCylinder("coin", { diameter: 0.6, height: 0.1 }, scene);
+  var coin = BABYLON.MeshBuilder.CreateCylinder("coin", { diameter: 1, height: 0.2 }, scene);
   var coinMat = new BABYLON.StandardMaterial("coinMaterial", scene);
   coinMat.diffuseColor = BABYLON.Color3.Yellow();
   coinMat.specularPower = 256;
@@ -63,11 +118,11 @@ const createScene = async function () {
     box.visibility = 0; // Make the box invisible
     return box;
   }
-
+  const coinQueue = new Queue();
   // Example of creating two invisible boxes
-  var box1 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 50, 5));
-  var box2 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 50, -5));
-  var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 50, 0));
+  var box1 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 5));
+  var box2 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, -5));
+  var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 0));
   var z = 0
   function shootCoinFromBox(box) {
     z += 1
@@ -85,6 +140,10 @@ const createScene = async function () {
     // Apply an impulse to shoot the coin
     var shootDirection = new BABYLON.Vector3(2 * (Math.random() - 0.5), 2 * (Math.random() - 0.5), 2 * (Math.random() - 0.5));
     coinClone.physicsImpostor.applyImpulse(shootDirection.scale(20), coinClone.getAbsolutePosition());
+    coinQueue.enqueue(coinClone);
+    if (coinQueue.length > 360) {
+      coinQueue.dequeue().dispose();
+    }
   }
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
@@ -164,12 +223,12 @@ const createScene = async function () {
       // Start playing each animation group
       animationGroup.start();
     });
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 15; i++) {
       setTimeout(function () {
         shootCoinFromBox(box1);
         shootCoinFromBox(box2);
         shootCoinFromBox(box3); // Replace with your function to shoot a ball
-      }, 15 * i); // Delay increases with each iteration
+      }, 3000  + 15 * i); // Delay increases with each iteration
     }
   };
 

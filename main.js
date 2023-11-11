@@ -113,7 +113,7 @@ const createScene = async function () {
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0.7;
 
-  slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots7.glb", scene);
+  slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots9.glb", scene);
   const casino = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "blacklodge1.glb", scene);
   slotMachine.animationGroups.forEach((animationGroup, index) => {
     // Start playing each animation group

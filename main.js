@@ -7,8 +7,7 @@ import ammo from 'ammo.js';
 const Ammo = await ammo.bind(window)();
 const canvas = document.getElementById('renderCanvas');
 
-const engine = new BABYLON.WebGPUEngine(canvas);
-await engine.initAsync();
+const engine = new BABYLON.Engine(canvas);
 let slotMachine; // Declare it in a higher scope
 
 const createScene = async function () {
@@ -29,6 +28,11 @@ const createScene = async function () {
   camera.angularSensibilityY = 2000;
   camera.panningSensibility = 2000;
   camera.fov = 1.016;
+  camera.lowerRadiusLimit = 12;
+  camera.upperRadiusLimit = 56.5;
+  camera.lowerAlphaLimit = 2.078;
+  camera.upperAlphaLimit = 4.224;
+  camera.upperBetaLimit = 1.73;
   const physicsPlugin = new BABYLON.AmmoJSPlugin(true, Ammo);
   scene.enablePhysics(new BABYLON.Vector3(0, -18, 0), physicsPlugin);
 
@@ -38,6 +42,8 @@ const createScene = async function () {
   ground.position.y = -1;
   ground.visibility = 0;
   ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+
   // var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   // Create a coin template with physics properties but not visible
   // var coinMeshes = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "mario_coin.glb", scene);
@@ -98,7 +104,7 @@ const createScene = async function () {
   light.intensity = 0.7;
 
   slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots9.glb", scene);
-  const casino = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "blacklodge1.glb", scene);
+  const casino = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "blacklodge23.glb", scene);
   slotMachine.animationGroups.forEach((animationGroup, index) => {
     // Start playing each animation group
     animationGroup.stop();

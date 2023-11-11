@@ -52,6 +52,7 @@ const createScene = async function () {
   );
   camera.attachControl(canvas, true);
   camera.useFramingBehavior = true;
+
  /* camera.angularSensibilityX = 2000;
   camera.angularSensibilityY = 2000;
   camera.panningSensibility = 2000;
@@ -61,6 +62,7 @@ const createScene = async function () {
   camera.lowerAlphaLimit = 2.078;
   camera.upperAlphaLimit = 4.224;
   camera.upperBetaLimit = 1.73;*/
+
   const physicsPlugin = new BABYLON.AmmoJSPlugin(true, Ammo);
   scene.enablePhysics(new BABYLON.Vector3(0, -18, 0), physicsPlugin);
 
@@ -134,6 +136,109 @@ const shadowGenerator = new BABYLON.ShadowGenerator(1024, spotLight);
   wall4.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
   wall4.visibility = 0;
   wall4.physicsImpostor = new BABYLON.PhysicsImpostor(wall4, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var chair1seat = BABYLON.MeshBuilder.CreateBox("chair1seat", { width: 8, depth: 9, height: 5 }, scene);
+  chair1seat.position.x = -10;
+  chair1seat.position.z = 21;
+  chair1seat.position.y = 2.5;
+  chair1seat.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair1seat.visibility = 0;
+  chair1seat.physicsImpostor = new BABYLON.PhysicsImpostor(chair1seat, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var chair1back = BABYLON.MeshBuilder.CreateBox("chair1back", { width: 10, depth: 3, height: 8 }, scene);
+  chair1back.position.x = -7.7;
+  chair1back.position.z = 23.3;
+  chair1back.position.y = 5;
+  chair1back.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  chair1back.visibility = 0;
+  chair1back.physicsImpostor = new BABYLON.PhysicsImpostor(chair1back, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var chair1right = BABYLON.MeshBuilder.CreateBox("chair1right", { width: 8, depth: 2, height: 7 }, scene);
+  chair1right.position.x = -14;
+  chair1right.position.z = 24;
+  chair1right.position.y = 3.5;
+  chair1right.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair1right.visibility = 0;
+  chair1right.physicsImpostor = new BABYLON.PhysicsImpostor(chair1right, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  var chair1left = BABYLON.MeshBuilder.CreateBox("chair1left", { width: 8, depth: 2, height: 7 }, scene);
+  chair1left.position.x = -6.5;
+  chair1left.position.z = 17;
+  chair1left.position.y = 3.5;
+  chair1left.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair1left.visibility = 0;
+  chair1left.physicsImpostor = new BABYLON.PhysicsImpostor(chair1left, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+  
+  // Chair 2 rotated 90 degrees clockwise compared to chair 1
+  var chair2seat = BABYLON.MeshBuilder.CreateBox("chair2seat", { width: 8, depth: 9, height: 5 }, scene);
+  chair2seat.position.x = -11;
+  chair2seat.position.z = -26;
+  chair2seat.position.y = 2.5;
+  chair2seat.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair2seat.visibility = 0;
+  chair2seat.physicsImpostor = new BABYLON.PhysicsImpostor(chair2seat, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  var chair2back = BABYLON.MeshBuilder.CreateBox("chair2back", { width: 10, depth: 3, height: 8 }, scene);
+  chair2back.position.x = -8.7;
+  chair2back.position.z = -28.3;
+  chair2back.position.y = 5;
+  chair2back.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair2back.visibility = 0;
+  chair2back.physicsImpostor = new BABYLON.PhysicsImpostor(chair2back, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  var chair2right = BABYLON.MeshBuilder.CreateBox("chair2right", { width: 8, depth: 2, height: 7.2 }, scene);
+  chair2right.position.x = -7.5;
+  chair2right.position.z = -22.5;
+  chair2right.position.y = 3.5;
+  chair2right.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  chair2right.visibility = 0;
+  chair2right.physicsImpostor = new BABYLON.PhysicsImpostor(chair2right, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  var chair2left = BABYLON.MeshBuilder.CreateBox("chair2left", { width: 8, depth: 2, height: 7.2 }, scene);
+  chair2left.position.x = -14.5;
+  chair2left.position.z = -29.5;
+  chair2left.position.y = 3.5;
+  chair2left.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  chair2left.visibility = 0;
+  chair2left.physicsImpostor = new BABYLON.PhysicsImpostor(chair2left, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  // Chair 3, left of chair 2
+  var chair3seat = BABYLON.MeshBuilder.CreateBox("chair3seat", { width: 8, depth: 9, height: 5 }, scene);
+  chair3seat.position.x = -19.75;
+  chair3seat.position.z = -34.75;
+  chair3seat.position.y = 2.5;
+  chair3seat.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair3seat.visibility = 0;
+  chair3seat.physicsImpostor = new BABYLON.PhysicsImpostor(chair3seat, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  var chair3back = BABYLON.MeshBuilder.CreateBox("chair3back", { width: 10, depth: 3, height: 8 }, scene);
+  chair3back.position.x = -17.450;
+  chair3back.position.z = -37.050;
+  chair3back.position.y = 5;
+  chair3back.rotation = new BABYLON.Vector3(0, -Math.PI / 4, 0);
+  chair3back.visibility = 0;
+  chair3back.physicsImpostor = new BABYLON.PhysicsImpostor(chair3back, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  var chair3right = BABYLON.MeshBuilder.CreateBox("chair3right", { width: 8, depth: 2, height: 7.2 }, scene);
+  chair3right.position.x = -16.250;
+  chair3right.position.z = -31.250;
+  chair3right.position.y = 3.5;
+  chair3right.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  chair3right.visibility = 0;
+  chair3right.physicsImpostor = new BABYLON.PhysicsImpostor(chair3right, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+  var chair3left = BABYLON.MeshBuilder.CreateBox("chair3left", { width: 8, depth: 2, height: 7.2 }, scene);
+  chair3left.position.x = -23.250;
+  chair3left.position.z = -38.250;
+  chair3left.position.y = 3.5;
+  chair3left.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  chair3left.visibility = 0;
+  chair3left.physicsImpostor = new BABYLON.PhysicsImpostor(chair3left, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
+
+// Table, only one and only top has physics
+  var tabletop = BABYLON.MeshBuilder.CreateBox("tabletop", { width: 4.7, depth: 7, height: 1 }, scene);
+  tabletop.position.x = -3.1;
+  tabletop.position.z = 13.1;
+  tabletop.position.y = 5;
+  tabletop.rotation = new BABYLON.Vector3(0, Math.PI / 4, 0);
+  tabletop.visibility = 0;
+  tabletop.physicsImpostor = new BABYLON.PhysicsImpostor(tabletop, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, friction: 0.5, restitution: 0 }, scene);
   // var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   // Create a coin template with physics properties but not visible
   // var coinMeshes = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "mario_coin.glb", scene);
@@ -167,6 +272,9 @@ const shadowGenerator = new BABYLON.ShadowGenerator(1024, spotLight);
   var box1 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 5));
   var box2 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, -5));
   var box3 = createInvisibleBox(scene, new BABYLON.Vector3(-10, 45, 0));
+  var box4 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, -3));
+  var box5 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4, -1));
+  var box6 = createInvisibleBox(scene, new BABYLON.Vector3(-3, 4,  1));
   var z = 0
   function shootCoinFromBox(box) {
     z += 1
@@ -190,6 +298,35 @@ const shadowGenerator = new BABYLON.ShadowGenerator(1024, spotLight);
     if (coinQueue.length > 360) {
       coinQueue.dequeue().dispose();
     }
+  }
+  function shootCoinFromMachine(box) {
+    z += 1
+    var coinClone = coin.clone(z + "coinClone" + z);
+    coinClone.visibility = 1;
+    coinClone.position = box.position.clone(); // Start at the box's position
+
+    // Add physics to the coin
+    coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 10, restitution: 0 }, scene);
+    // Set random rotation
+    var randomRotationX = Math.random() * 2 * Math.PI; // Random rotation around X axis
+    var randomRotationY = Math.random() * 2 * Math.PI; // Random rotation around Y axis
+    var randomRotationZ = Math.random() * 2 * Math.PI; // Random rotation around Z axis
+    coinClone.rotation = new BABYLON.Vector3(randomRotationX, randomRotationY, randomRotationZ);
+    // Apply an impulse to shoot the coin
+    var shootDirection = new BABYLON.Vector3(-4 + Math.random() - 0.5, 2 + Math.random() - 0.5, Math.random() - 0.5);
+    coinClone.physicsImpostor.applyImpulse(shootDirection.scale(10), coinClone.getAbsolutePosition());
+    coinClone.actionManager = new BABYLON.ActionManager(scene);
+    coinClone.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        {
+          trigger: BABYLON.ActionManager.OnIntersectionEnterTrigger,
+          parameter: ground,
+        },
+        function () {
+          coinClone.dispose();
+        }
+      )
+    );
   }
 
   slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots9.glb", scene);
@@ -259,12 +396,19 @@ const shadowGenerator = new BABYLON.ShadowGenerator(1024, spotLight);
       // Start playing each animation group
       animationGroup.start();
     });
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 30; i++) {
       setTimeout(function () {
         shootCoinFromBox(box1);
         shootCoinFromBox(box2);
-        shootCoinFromBox(box3); // Replace with your function to shoot a ball
+        shootCoinFromBox(box3);
       }, 3000  + 15 * i); // Delay increases with each iteration
+    }
+    for (let i = 0; i < 15; i++) {
+      setTimeout(function () {
+        shootCoinFromMachine(box4);
+        shootCoinFromMachine(box5);
+        shootCoinFromMachine(box6);
+      }, 4000  + 150 * i); // Delay increases with each iteration
     }
   };
 

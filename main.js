@@ -51,7 +51,7 @@ const createScene = async function () {
     scene
   );
   camera.attachControl(canvas, true);
-  camera.useFramingBehavior = true;
+  camera.useFramingBehavior = false;
 
   camera.angularSensibilityX = 2000;
   camera.angularSensibilityY = 2000;
@@ -529,7 +529,7 @@ const createScene = async function () {
   slotMachine = await BABYLON.SceneLoader.ImportMeshAsync(
     "",
     "/assets/",
-    "crazyslots15.glb",
+    "crazyslots18.glb",
     scene
   );
   const casino = await BABYLON.SceneLoader.ImportMeshAsync(
@@ -553,7 +553,7 @@ const createScene = async function () {
   casinoMesh.rotate(new BABYLON.Vector3(0, 1, 0), (Math.PI * 3) / 4);
   casinoMesh.position.x = -49;
   casinoMesh.position.z = -12;
-  
+
   //Adding shadows for all casino meshes
   for (let i = 0; i < casino.meshes.length; i++) {
     casino.meshes[i].receiveShadows = true;
@@ -729,7 +729,7 @@ const createScene = async function () {
       new BABYLON.Vector3(-50, 15, 0)
     );
   };
- 
+
   return scene;
 };
 

@@ -368,9 +368,6 @@ const createScene = async function () {
         shootCoinFromBox(box1);
         shootCoinFromBox(box2);
         shootCoinFromBox(box3);
-        shootCoinFromMachine(box4);
-        shootCoinFromMachine(box5);
-        shootCoinFromMachine(box6);
       }, 3000  + 15 * i); // Delay increases with each iteration
     }
     for (let i = 0; i < 15; i++) {

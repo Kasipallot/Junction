@@ -593,8 +593,8 @@ const createScene = async function () {
   buttonbox.appendChild(tTag);
 
   var b8 = document.createElement("button");
-  b8.id = "WIN";
-  b8.textContent = "WIN";
+  b8.id = "PLAY";
+  b8.textContent = "PLAY";
   b8.style.display = "block";
   b8.style.width = "100%";
   b8.style.fontSize = "1.1em";
@@ -620,16 +620,6 @@ const createScene = async function () {
     }
   };
 
-  var b9 = document.createElement("button");
-  b9.id = "LOSE";
-  b9.textContent = "LOSE";
-  b9.style.display = "block";
-  b9.style.width = "100%";
-  b9.style.fontSize = "1.1em";
-  buttonbox.appendChild(b9);
-  b9.onclick = function () {
-    //setCamLateralRight();
-  };
 
   var b10 = document.createElement("button");
   b10.id = "ZoomIn";
@@ -738,20 +728,7 @@ const createScene = async function () {
       new BABYLON.Vector3(-50, 15, 0)
     );
   };
-  var setCamLateralRight = function () {
-    animateCameraTargetToPosition(
-      camera,
-      speed,
-      frameCount,
-      new BABYLON.Vector3(-5, 15, 0)
-    );
-    animateCameraToPosition(
-      camera,
-      speed,
-      frameCount,
-      new BABYLON.Vector3(85, 15, 0)
-    );
-  };
+ 
   return scene;
 };
 

@@ -53,21 +53,7 @@ const createScene = async function () {
   coin.material = coinMat;
   coin.visibility = 0;
 
-  var coins = []; // Array to hold all coins
 
-  for (var i = 0; i < 10; i++) {
-    for (var j = 0; j < 10; j++) {
-      var coinClone = coin.clone("coinClone" + i + j);
-      coinClone.visibility = 1;
-      coinClone.position.y = 20;
-      coinClone.position.x = (i - 5) * 1.4 - 10;
-      coinClone.position.z = (j - 5) * 1.4;
-      var shootDirection = new BABYLON.Vector3(2 * (Math.random() - 0.5), 2 * (Math.random() - 0.5), 2 * (Math.random() - 0.5));
-      coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 0.5, restitution: 1 }, scene);
-      coinClone.physicsImpostor.applyImpulse(shootDirection.scale(10), coinClone.getAbsolutePosition());
-      coins.push(coinClone); // Add the coin to the array
-    }
-  }
   // Function to create an invisible box
   var a = 0
   function createInvisibleBox(scene, position) {
@@ -99,7 +85,6 @@ const createScene = async function () {
     // Apply an impulse to shoot the coin
     var shootDirection = new BABYLON.Vector3(2 * (Math.random() - 0.5), 2 * (Math.random() - 0.5), 2 * (Math.random() - 0.5));
     coinClone.physicsImpostor.applyImpulse(shootDirection.scale(20), coinClone.getAbsolutePosition());
-    coins.push(coinClone); // Add the coin to the array
   }
 
   // This creates a light, aiming 0,1,0 - to the sky (non-mesh)

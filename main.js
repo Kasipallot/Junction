@@ -75,14 +75,14 @@ const createScene = async function () {
     scene
   );
 
-  const lightPoint = new BABYLON.PointLight(
+  const pointLight1 = new BABYLON.PointLight(
     "pointLight",
     new BABYLON.Vector3(-4.5, 15.5, -19),
     scene
   );
 
-  //lightPoint.diffuse = new BABYLON.Color3(1, 0.3, 0)
-  lightPoint.intensity = 300;
+  //pointLight1.diffuse = new BABYLON.Color3(1, 0.3, 0)
+  pointLight1.intensity = 300;
 
   const spotLight = new BABYLON.SpotLight(
     "spotLight",
@@ -100,7 +100,8 @@ const createScene = async function () {
 
   // Default intensity is 1. Let's dim the light a small amount
   light.intensity = 0;
-
+  //Creating the shadow generator for spotlight
+  spotLight.shadowEnabled = true;
   const shadowGenerator = new BABYLON.ShadowGenerator(4096, spotLight);
 
   var ground = BABYLON.MeshBuilder.CreateBox(
@@ -418,7 +419,8 @@ const createScene = async function () {
   coinMat.specularPower = 256;
   coin.material = coinMat;
   coin.visibility = 0;
-  coin.shadowEnabled = true;
+  
+  // Adding the original coin shadows from spotlight
   shadowGenerator.addShadowCaster(coin);
   coin.receiveShadows = true;
 
@@ -445,7 +447,7 @@ const createScene = async function () {
     var coinClone = coin.clone(z + "coinClone");
     coinClone.visibility = 1;
     coinClone.position = box.position.clone(); // Start at the box's position
-    coinClone.shadowEnabled = true;
+    // Adding the spotlight shadows for the coin clones
     coinClone.receiveShadows = true;
     shadowGenerator.addShadowCaster(coinClone);
     // Add physics to the coin
@@ -544,20 +546,20 @@ const createScene = async function () {
 
   const slotMachineMesh = slotMachine.meshes[0];
   slotMachineMesh.scaling.scaleInPlace(2.8);
+  //Shadows for slotMachine
   slotMachineMesh.receiveShadows = true;
   shadowGenerator.addShadowCaster(slotMachineMesh);
-  ground.receiveShadows = true;
-  shadowGenerator.addShadowCaster(ground);
+
   const casinoMesh = casino.meshes[0];
   casinoMesh.rotate(new BABYLON.Vector3(0, 1, 0), (Math.PI * 3) / 4);
   casinoMesh.position.x = -49;
   casinoMesh.position.z = -12;
-  casinoMesh.receiveShadows = true;
-  //shadowGenerator.addShadowCaster(casinoMesh);
-  casino.meshes[2].receiveShadows = true;
-  casino.meshes[1].receiveShadows = true;
-  casino.meshes[4].receiveShadows = true;
-  //casino.forEach((mesh) => mesh.receiveShadows = true);
+  
+  //Adding shadows for all casino meshes
+  for (let i = 0; i < casino.meshes.length; i++) {
+    casino.meshes[i].receiveShadows = true;
+    shadowGenerator.addShadowCaster(casino.meshes[i])
+  }
 
   const cameraTarget = slotMachineMesh.position.add(
     new BABYLON.Vector3(-2, 10, -1)

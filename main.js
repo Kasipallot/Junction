@@ -5,7 +5,7 @@ import ammo from "ammo.js";
 
 const Ammo = await ammo.bind(window)();
 const canvas = document.getElementById("renderCanvas");
-
+var slotSound = new Audio("/assets/mixkit-slot-machine-random-wheel-1930.wav")
 const engine = new BABYLON.WebGPUEngine(canvas);
 await engine.initAsync();
 let slotMachine; // Declare it in a higher scope
@@ -602,6 +602,7 @@ const createScene = async function () {
   b8.onclick = function () {
     slotMachine.animationGroups.forEach((animationGroup, index) => {
       // Start playing each animation group
+      slotSound.play();
       animationGroup.start();
     });
     for (let i = 0; i < 30; i++) {

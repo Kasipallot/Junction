@@ -51,7 +51,7 @@ const createScene = async function () {
   );
   camera.attachControl(canvas, true);
   camera.useFramingBehavior = true;
-  camera.angularSensibilityX = 2000;
+ /* camera.angularSensibilityX = 2000;
   camera.angularSensibilityY = 2000;
   camera.panningSensibility = 2000;
   camera.fov = 1.016;
@@ -59,11 +59,47 @@ const createScene = async function () {
   camera.upperRadiusLimit = 56.5;
   camera.lowerAlphaLimit = 2.078;
   camera.upperAlphaLimit = 4.224;
-  camera.upperBetaLimit = 1.73;
+  camera.upperBetaLimit = 1.73;*/
   const physicsPlugin = new BABYLON.AmmoJSPlugin(true, Ammo);
   scene.enablePhysics(new BABYLON.Vector3(0, -18, 0), physicsPlugin);
 
   const utilLayer = new BABYLON.UtilityLayerRenderer(scene);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+  const light = new BABYLON.HemisphericLight(
+    "light",
+    new BABYLON.Vector3(0, 1, 0),      
+    scene
+  );
+  
+    
+  const lightPoint = new BABYLON.PointLight(
+    'pointLight',
+    new BABYLON.Vector3(-4.5 ,15.5, -19),
+    scene
+  )
+  
+    //lightPoint.diffuse = new BABYLON.Color3(1, 0.3, 0)
+  lightPoint.intensity = 300;
+  
+  const spotLight = new BABYLON.SpotLight(
+    "spotLight",
+    new BABYLON.Vector3(-30, 25, 12),
+    new BABYLON.Vector3(1, -1, -0.5),
+    Math.PI/1.5,
+    0,
+    scene
+  );
+  spotLight.intensity = 10000;
+  spotLight.shadowEnabled = true;
+  
+  const lightGizmo = new BABYLON.LightGizmo(utilLayer);
+  lightGizmo.light = spotLight;
+  
+    // Default intensity is 1. Let's dim the light a small amount
+  light.intensity = 0;
+  
+const shadowGenerator = new BABYLON.ShadowGenerator(16000, spotLight);
 
   var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 175, depth: 175, height: 2.75 }, scene);
   ground.position.y = -1;
@@ -111,6 +147,9 @@ const createScene = async function () {
   coinMat.specularPower = 256;
   coin.material = coinMat;
   coin.visibility = 0;
+  coin.shadowEnabled = true;
+  shadowGenerator.addShadowCaster(coin);
+  coin.receiveShadows = true;
 
 
   // Function to create an invisible box
@@ -133,7 +172,9 @@ const createScene = async function () {
     var coinClone = coin.clone(z + "coinClone");
     coinClone.visibility = 1;
     coinClone.position = box.position.clone(); // Start at the box's position
-
+    coinClone.shadowEnabled = true;
+    coinClone.receiveShadows = true;
+    shadowGenerator.addShadowCaster(coinClone);
     // Add physics to the coin
     coinClone.physicsImpostor = new BABYLON.PhysicsImpostor(coinClone, BABYLON.PhysicsImpostor.CylinderImpostor, { mass: 1, friction: 10, restitution: 0 }, scene);
     // Set random rotation
@@ -150,16 +191,6 @@ const createScene = async function () {
     }
   }
 
-  // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  const light = new BABYLON.HemisphericLight(
-    "light",
-    new BABYLON.Vector3(0, 1, 0),
-    scene
-  );
-
-  // Default intensity is 1. Let's dim the light a small amount
-  light.intensity = 0.7;
-
   slotMachine = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "crazyslots9.glb", scene);
   const casino = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "blacklodge23.glb", scene);
   slotMachine.animationGroups.forEach((animationGroup, index) => {
@@ -169,22 +200,22 @@ const createScene = async function () {
 
   const slotMachineMesh = slotMachine.meshes[0];
   slotMachineMesh.scaling.scaleInPlace(2.8);
-
+  slotMachineMesh.receiveShadows = true;
+  shadowGenerator.addShadowCaster(slotMachineMesh);
+  ground.receiveShadows = true;
+  shadowGenerator.addShadowCaster(ground);
   const casinoMesh = casino.meshes[0];
   casinoMesh.rotate(new BABYLON.Vector3(0, 1, 0), Math.PI * 3 / 4);
   casinoMesh.position.x = -49;
   casinoMesh.position.z = -12;
+  casinoMesh.receiveShadows = true;
+  //shadowGenerator.addShadowCaster(casinoMesh);
+  casino.meshes[2].receiveShadows = true;
+  casino.meshes[1].receiveShadows = true;
+  casino.meshes[4].receiveShadows = true;
+  //casino.forEach((mesh) => mesh.receiveShadows = true);
 
-  ground.receiveShadows = true;
 
-  scene.onPointerDown = function castRay() {
-    const hit = scene.pick(scene.pointerX, scene.pointerY);
-
-    if (hit.pickedMesh && hit.pickedMesh.name === "mySphere") {
-      hit.pickedMesh.material = new BABYLON.StandardMaterial();
-      hit.pickedMesh.material.diffuseColor = BABYLON.Color3.Red();
-    }
-  };
   const cameraTarget = slotMachineMesh.position.add(new BABYLON.Vector3(-2, 10, -1));
   camera.setTarget(cameraTarget);
 

@@ -599,29 +599,43 @@ const createScene = async function () {
   b8.style.display = "block";
   b8.style.width = "100%";
   b8.style.fontSize = "1.1em";
+  var effectEnded = true;
   buttonbox.appendChild(b8);
   b8.onclick = function () {
-    slotMachine.animationGroups.forEach((animationGroup, index) => {
-      // Start playing each animation group
-      animationGroup.start();
-    });
-    slotSound.play();
-    setTimeout(function () {
-      winSound.play();
-    }, 4000);
-    for (let i = 0; i < 30; i++) {
+    if (effectEnded) {
+      effectEnded = false
+      slotMachine.animationGroups.forEach((animationGroup, index) => {
+        // Start playing each animation group
+        animationGroup.start();
+      });
       setTimeout(function () {
-        shootCoinFromBox(box1);
-        shootCoinFromBox(box2);
-        shootCoinFromBox(box3);
-      }, 3000 + 15 * i); // Delay increases with each iteration
-    }
-    for (let i = 0; i < 15; i++) {
+        slotSound.play();
+      }, 1700);
       setTimeout(function () {
-        shootCoinFromMachine(box4);
-        shootCoinFromMachine(box5);
-        shootCoinFromMachine(box6);
-      }, 4000 + 150 * i); // Delay increases with each iteration
+        slotSound.pause();
+        slotSound.currentTime = 0;
+      }, 3900);
+      setTimeout(function () {
+        winSound.play();
+      }, 4100);
+
+      setTimeout(function () {
+        effectEnded = true;
+      }, 5500);
+      for (let i = 0; i < 30; i++) {
+        setTimeout(function () {
+          shootCoinFromBox(box1);
+          shootCoinFromBox(box2);
+          shootCoinFromBox(box3);
+        }, 3000 + 15 * i); // Delay increases with each iteration
+      }
+      for (let i = 0; i < 15; i++) {
+        setTimeout(function () {
+          shootCoinFromMachine(box4);
+          shootCoinFromMachine(box5);
+          shootCoinFromMachine(box6);
+        }, 4000 + 150 * i); // Delay increases with each iteration
+      }
     }
   };
 

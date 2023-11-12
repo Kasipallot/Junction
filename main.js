@@ -3,6 +3,10 @@ import "@babylonjs/loaders/glTF";
 import { Inspector } from "@babylonjs/inspector";
 import ammo from "ammo.js";
 
+if (!navigator.gpu) {
+  throw new Error("WebGPU not supported on this browser.");
+}
+
 const Ammo = await ammo.bind(window)();
 const canvas = document.getElementById("renderCanvas");
 var slotSound = new Audio("/assets/mixkit-slot-machine-random-wheel-1930.wav");
@@ -67,22 +71,12 @@ const createScene = async function () {
   const physicsPlugin = new BABYLON.AmmoJSPlugin(true, Ammo);
   scene.enablePhysics(new BABYLON.Vector3(0, -18, 0), physicsPlugin);
 
-  const utilLayer = new BABYLON.UtilityLayerRenderer(scene);
-
-  // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  const light = new BABYLON.HemisphericLight(
-    "light",
-    new BABYLON.Vector3(0, 1, 0),
-    scene
-  );
-
   const pointLight1 = new BABYLON.PointLight(
     "pointLight",
     new BABYLON.Vector3(-4.5, 15.5, -19),
     scene
   );
 
-  //pointLight1.diffuse = new BABYLON.Color3(1, 0.3, 0)
   pointLight1.intensity = 300;
 
   const spotLight = new BABYLON.SpotLight(
@@ -96,11 +90,6 @@ const createScene = async function () {
   spotLight.intensity = 10000;
   spotLight.shadowEnabled = true;
 
-  //const lightGizmo = new BABYLON.LightGizmo(utilLayer);
-  //lightGizmo.light = spotLight;
-
-  // Default intensity is 1. Let's dim the light a small amount
-  light.intensity = 0;
   //Creating the shadow generator for spotlight
   spotLight.shadowEnabled = true;
   const shadowGenerator = new BABYLON.ShadowGenerator(4096, spotLight);
@@ -402,14 +391,7 @@ const createScene = async function () {
     { mass: 0, friction: 0.5, restitution: 0 },
     scene
   );
-  // var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-  // Create a coin template with physics properties but not visible
-  // var coinMeshes = await BABYLON.SceneLoader.ImportMeshAsync("", "/assets/", "mario_coin.glb", scene);
-  // var coin = coinMeshes.meshes[0];
-  // coin.scaling.scaleInPlace(0.06);
-  // // Rotate 90 degrees so the face is up
-  // coin.rotate(new BABYLON.Vector3(1, 0, 0), Math.PI / 2);
-  // coin.visibility = 0;
+
   var coin = BABYLON.MeshBuilder.CreateCylinder(
     "coin",
     { diameter: 1, height: 0.2 },
@@ -764,4 +746,5 @@ window.addEventListener("resize", function () {
   engine.resize();
 });
 
-Inspector.Show(scene, {});
+//Uncomment if you want to show the inspector (for debugging)
+//Inspector.Show(scene, {});
